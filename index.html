@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+        content="Steering Your Diffusion Policy with Latent Space Reinforcement Learning.">
+  <meta name="keywords" content="DSRL">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Steering Your Diffusion Policy with Latent Space Reinforcement Learning</title>
 
@@ -212,7 +212,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>
+          <p style="font-size: 20px">
           Robotic control policies learned from human demonstrations have achieved impressive results in many real-world applications. However, in scenarios where initial performance is not satisfactory, as is often the case in novel open-world settings, such behavioral cloning (BC)-learned policies typically require collecting additional human demonstrations to further improve their behavior—an expensive and time-consuming process. In contrast, reinforcement learning (RL) holds the promise of enabling autonomous online policy improvement, but often falls short of achieving this due to the large number of samples it typically requires. In this work we take steps towards enabling fast autonomous adaptation of BC-trained policies via efficient real-world RL. Focusing in particular on diffusion policies—a state-of-the-art BC methodology—we propose <i>diffusion steering via reinforcement learning</i> (DSRL): adapting the BC policy by running RL over its latent-noise space. We show that DSRL is highly sample efficient, requires only black-box access to the BC policy, and enables effective real-world autonomous policy improvement. Furthermore, DSRL avoids many of the challenges associated with finetuning diffusion policies, obviating the need to modify the weights of the base policy at all. We demonstrate DSRL on simulated benchmarks, real-world robotic tasks, and for adapting pretrained generalist policies, illustrating its sample efficiency and effective performance at real-world policy improvement.
           </p>
         </div>
@@ -236,7 +236,7 @@
 
 
  <section class="section">
-    <div class="container is-max-desktop">
+    <div class="container has-text-centered">
       <div class="columns is-centered">
         <div class="content has-text-centered">
           <h2 class="title is-3">Approach</h2>
@@ -257,31 +257,18 @@
             <!-- <p style="text-align: center;"><small>Schematic illustrating the reasoning steps produced by our embodied -->
                 <!-- chain-of-thought policy. Pink boxes represent embodied reasoning steps.</small></p> -->
 
-            <p>
+            <p style="font-size: 20px">
               Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(w \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(a\). We propose modifying the initial distribution of \(w\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\), that instead of choosing \(w \sim \mathcal{N}(0,I)\), chooses \(w\) to <i>steer</i> the distribution of actions produced by \(\pi_{\mathrm{dp}}\) in a desirable way, enabling highly sample efficient real-world adaptation of robot policies.
             </p>
 
-            <p>
+            <p style="font-size: 20px">
               We refer to our approach as DSRL: Diffusion Steering via Reinforcement Learning. Notably, DSRL:
-              <ul>
+              <ul style="font-size: 20px">
                 <li>Completely avoids challenges typically associated with finetuning diffusion policies—such as back-propagation-through-time—by treating the noise as the action, and interpreting the base diffusion policy as part of the environment.</li>
                 <li>Only requires training a small MLP policy to select the noise, rather than finetuning the weights of a (potentially much larger) diffusion policy.</li>
                 <li>Does not require any access to the weights of the base diffusion policy, treating it completely as a black-box.</li>
               </ul>
             </p>
-
-
-            <h2 class="title is-4">Improving sample efficiency and incorporating offline data with noise aliasing</h2>
-            While in principle DSRL can be instantiated with virtually any RL algorithm, we introduce an approach which makes particular use of the diffusion policy's structure to increase sample efficiency and incorporate offline data. DSRL treats the noise \(w\) as an action, so that if we select noise \(w\), denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(a\), then instead of transition \((s, a, r, s')\), we train on the transition \((s, w, r, s')\). This introduces two inefficiences, however:
-            <ul>
-                <li>There may exist \(w'\neq w\) such that, when denoised, \(w'\) produces the same denoised action \(a\) as \(w\). Thus, we can, in principle, infer that \(w'\) has the same behavior in our environment as \(w\) without actually playing it, yet naively applying an RL algorithm to \(w\) ignores this potential <i>aliasing</i> of noise actions.</li>
-                <li>In the typical offline learning setting, we are given a dataset of transitions of the form \((s, a, r, s')\), without the corresponding \(w\), so directly learning over the noise-space actions does not allow for incorporating offline data.</li>
-            </ul>
-            To overcome these challenges, we instead propose the following algorithm:
-            <div class="column  has-text-centered">
-              <img src="./static/im/dsrl_alg.pdf" width="700px" />
-            </div>
-            We train one \(Q\)-function on the original action space using only transitions of the form \((s, a, r, s')\), and then train a second \(Q\)-function on the noise space via distillation: using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((a,w)\) pairs, and training the noise space \(Q\)-function at \(w\) to match the value of the \(Q\)-function on the original action space at \(a\). This enables more sample-efficient, fully off-policy, learning, and naturally incorporates offline data.
           </div>
         </div>
       </div>
@@ -290,21 +277,27 @@
 
 
 <div class="content has-text-centered">
-  <div class="container">
+  <!-- <div class="container is-fluid"> -->
+    <div style="width: 100%; padding: 0 20px;"> 
     <h2 class="title is-3">DSRL Enables Real-World Improvement of Single-Task Diffusion Policies</h2>
-      <div class="columns is-multiline is-centered">
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+    <p style="text-align: center; font-size: 20px;">Performance of single-task diffusion policy trained on 10 demonstrations before and after DSRL adaptation.</p>
+    <div class="columns is-multiline is-centered">
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
             src="./static/videos/franka_pnp_base.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
-            <p style="font-size: 18px; font-weight: bold;">Diffusion policy before DSRL adaptation</p>
+            <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise sampling</p>
         </div>
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
+            src="./static/videos/dsrl_training_franka.mp4" poster="./resources/loading-icon.gif"></video>
+            <p style="font-size: 18px; font-weight: bold;">Uncut DSRL training timelapse</p>
+        </div>
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
             src="./static/videos/franka_pnp_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-            <p style="font-size: 18px; font-weight: bold;">Diffusion policy after DSRL adaptation</p>            
+            <p style="font-size: 18px; font-weight: bold;">Diffusion policy with DSRL-learned noise policy</p>            
         </div>
-        <p style="text-align: center; font-size: 20px;">Performance of single-task diffusion policy trained on 10 demonstrations before and after DSRL adaptation.</p>
       </div>
     </div>
   </div>
@@ -313,93 +306,120 @@
 
 
   <div class="content has-text-centered">
-    <div class="container">
+    <!-- <div class="container"> -->
+    <div style="width: 100%; padding: 0 20px;"> 
       <h2 class="title is-3">DSRL Enables Real-World Improvement of Multi-Task Diffusion Policies</h2>
+      <div class="columns is-multiline is-centered">
+        <p style="text-align: center; font-size: 20px;">Performance of multi-task diffusion policy trained on <a href="https://rail-berkeley.github.io/bridgedata/">BridgeData V2 dataset</a> before and after DSRL adaptation.</p>
+      </div>
         <div class="columns is-multiline is-centered">
-          <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+          <div class="column is-3">
+          <video controls autoplay muted playsinline
               src="./static/videos/widowx_mushroom_base.mp4" poster="./resources/loading-icon.gif"></video>
               <!-- <h2 class="title is-4">pi0 base</h2> -->            
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy before DSRL adaptation</p>
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise sampling</p>
           </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
+              src="./static/videos/dsrl_training_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
+              <p style="font-size: 18px; font-weight: bold;">Uncut DSRL training timelapse</p>
+          </div>
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
               src="./static/videos/widowx_mushroom_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy after DSRL adaptation</p>            
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with DSRL-learned noise policy</p>            
           </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
+        </div>
+        <div class="columns is-multiline is-centered">
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
               src="./static/videos/widowx_blocks_base.mp4" poster="./resources/loading-icon.gif"></video>
               <!-- <h2 class="title is-4">pi0 base</h2> -->            
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy before DSRL adaptation</p>
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise sampling</p>
           </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
               src="./static/videos/widowx_blocks_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy after DSRL adaptation</p>            
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with DSRL-learned noise policy</p>            
           </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
+        </div>
+        <div class="columns is-multiline is-centered">
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
               src="./static/videos/widowx_drawer_base.mp4" poster="./resources/loading-icon.gif"></video>
               <!-- <h2 class="title is-4">pi0 base</h2> -->            
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy before DSRL adaptation</p>
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise samplingn</p>
           </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
+          <div class="column is-3">
+            <video controls autoplay muted playsinline
               src="./static/videos/widowx_drawer_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-              <p style="font-size: 18px; font-weight: bold;">Diffusion policy after DSRL adaptation</p>         
+              <p style="font-size: 18px; font-weight: bold;">Diffusion policy with DSRL-learned noise policy</p>         
           </div>
-          <p style="text-align: center; font-size: 20px;">Performance of multi-task diffusion policy trained on <a href="https://rail-berkeley.github.io/bridgedata/">BridgeData V2 dataset</a> before and after DSRL adaptation.</p>
-        </div>
+          </div>
       </div>
     </div>
   <div style="height: 50px;"></div>
 
 
 <div class="content has-text-centered">
-  <div class="container">
+  <!-- <div class="container"> -->
+    <div style="width: 100%; padding: 0 20px;"> 
     <h2 class="title is-3">DSRL Enables Real-World Improvement of Pretrained Generalist Policies</h2>
+    <div class="columns is-multiline is-centered">
+      <p style="text-align: center; font-size: 20px;">Performance of pretrained generalist policy <a href="https://www.physicalintelligence.company/blog/pi0">\(\pi_0\)</a> before and after DSRL adaptation, utilizing the publically available DROID weights for \(\pi_0\).</p>
+    </div>
       <div class="columns is-multiline is-centered">
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
             src="./static/videos/pi0_toaster_base.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
             <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) zero-shot</p>
         </div>
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/pi0_toaster_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-            <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) after DSRL adaptation</p>            
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
+            src="./static/videos/dsrl_training_pi0_toaster.mp4" poster="./resources/loading-icon.gif"></video>
+            <p style="font-size: 18px; font-weight: bold;">Uncut DSRL training timelapse</p>
         </div>
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
+            src="./static/videos/pi0_toaster_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
+            <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) with DSRL-learned noise policy</p>            
+        </div>
+        </div>
+      <div class="columns is-multiline is-centered">
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
             src="./static/videos/pi0_spoon_base.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
             <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) zero-shot</p>
         </div>
-        <div class="column is-5">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/pi0_spoon_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-            <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) after DSRL adaptation</p>            
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
+            src="./static/videos/dsrl_training_pi0_spoon.mp4" poster="./resources/loading-icon.gif"></video>
+            <p style="font-size: 18px; font-weight: bold;">Uncut DSRL training timelapse</p>
         </div>
-        <p style="text-align: center; font-size: 20px;">Performance of <a href="https://www.physicalintelligence.company/blog/pi0">\(\pi_0\)</a> before and after DSRL adaptation.</p>
-      </div>
+        <div class="column is-3">
+          <video controls autoplay muted playsinline
+            src="./static/videos/pi0_spoon_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
+            <p style="font-size: 18px; font-weight: bold;">\(\pi_0\) with DSRL-learned noise policy</p>            
+        </div>
+        </div>
     </div>
   </div>
-<div style="height: 50px;"></div>
+<!-- <div style="height: 50px;"></div> -->
 
 
-<div class="content has-text-centered">
+<!-- <div class="content has-text-centered">
     <div class="container">
       <h2 class="title is-3">Uncut Training Timelapse</h2>
       <div id="evaluation-carousel" class="carousel results-carousel">
         <div class="item">
           <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_pi0_toaster.mp4" poster="./resources/loading-icon.gif"></video>
+            src="./static/videos/dsrl_training_franka.mp4" poster="./resources/loading-icon.gif"></video>
         </div>
         <div class="item">
           <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_pi0_spoon.mp4" poster="./resources/loading-icon.gif"></video>
+            src="./static/videos/dsrl_training_pi0_toaster.mp4" poster="./resources/loading-icon.gif"></video>
         </div>
         <div class="item">
           <video controls autoplay loop muted playsinline
@@ -412,59 +432,148 @@
       </div>
     </div>
   </div>
-  <div style="height: 30px;"></div>
+  <div style="height: 30px;"></div> -->
 
 
+  <section class="section">
 <div class="content has-text-centered">
   <div class="container">
     <h2 class="title is-3">Exploration</h2>
       <div class="columns is-multiline is-centered">
         <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+          <video controls autoplay muted playsinline
             src="./static/videos/exploration_dsrl_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
             <p style="font-size: 25px; font-weight: bold;">DSRL</p>
         </div>
         <div class="column is-5">
-          <video controls autoplay loop muted playsinline
+          <video controls autoplay muted playsinline
             src="./static/videos/exploration_rlpd_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
             <p style="font-size: 25px; font-weight: bold;">RLPD</p>            
+        </div>
+        <div class="content has-text-justified has-text-centered">
+          <p style="font-size: 20px">
+            We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. Each clip shows the first 9 episodes of online RL for each approach. We see that the behaviors induced by RLPD are effectively random, and provide no meaningful learning signal. In contrast, DSRL from the start plays behaviors that are ''reasonable'', attempting to pick up the mushroom on nearly every episode, providing much more useful data from the start.
+          </p>
         </div>
       </div>
     </div>
   </div>
-<div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="content has-text-centered">
-          <div class="content has-text-justified has-text-centered">
-            <p>
-              We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. Each clip shows the first 9 episodes of online RL for each approach. We see that the behaviors induced by RLPD are effectively random, and provide no meaningful learning signal. In contrast, DSRL from the start plays behaviors that are ''reasonable'', attempting to pick up the mushroom on nearly every episode, providing much more useful data from the start.
-            </p>
+    </section>
+
+      <section class="section">
+        <div class="container has-text-centered">
+          <div class="columns is-centered">
+            <div class="content has-text-centered">
+              <h2 class="title is-3">Improving Sample Efficiency with Noise Aliasing</h2>
+              <div class="content has-text-justified has-text-centered">
+            
+    
+                <!-- <h2 class="title is-4">Improving sample efficiency and incorporating offline data with noise aliasing</h2> -->
+                <p style="font-size: 20px">
+                While in principle DSRL can be instantiated with virtually any RL algorithm, we introduce an approach which makes particular use of the diffusion policy's structure to increase sample efficiency and incorporate offline data. 
+                <!-- This introduces two inefficiences, however: -->
+                <br>
+                <br>
+                DSRL treats the noise \(w\) as an action, so that if we select noise \(w\), denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(a\), then instead of transition \((s, a, r, s')\), we train on the transition \((s, w, r, s')\). 
+                There may, however, exist \(w'\neq w\) such that, when denoised, \(w'\) produces the same denoised action \(a\) as \(w\): 
+                <div class="column  has-text-centered">
+                  <img src="./static/videos/na_animation.gif" width="400px" />
+                </div>
+                <p style="font-size: 20px">Thus, in principle, we can infer that \(w'\) has the same behavior in our environment as \(w\) without actually playing it, yet naively applying an RL algorithm to \(w\) ignores this potential <i>aliasing</i> of noise actions.
+                Furthermore, in the typical offline learning setting, we are given a dataset of transitions of the form \((s, a, r, s')\), without the corresponding \(w\), so directly learning over the noise-space actions does not allow for incorporating offline data.
+                  <br>
+                  <br>
+                To exploit the noise-aliasing nature of the diffusion policy and also make use of offline data, we instead propose the following algorithm:</p>
+                <div class="column  has-text-centered">
+                  <img src="./static/im/dsrl_alg.png" width="900px" />
+                </div>
+                <p style="font-size: 20px">We train one \(Q\)-function on the original action space using only transitions of the form \((s, a, r, s')\), and then train a second \(Q\)-function on the noise space via distillation: using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((a,w)\) pairs, and training the noise space \(Q\)-function at \(w\) to match the value of the \(Q\)-function on the original action space at \(a\). This enables more sample-efficient, fully off-policy, learning, and naturally incorporates offline data.
+              </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
 
 
 <section class="section">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="content has-text-centered">
+      <div class="content has-text-centered">
+        <div class="container">
+          <!-- <div style="width: 100%; padding: 0 20px;">  -->
           <h2 class="title is-3">Simulated Results</h2>
+
+          <h2 class="title is-4">Online DSRL</h2>
+          <div class="columns is-multiline is-centered">
+              <div style="text-align: center;">
+                <img src="./static/im/sim_online1.png" width="950px" />
+                <br>
+                <img src="./static/im/sim_online2.png" width="1100px" />
+              <p style="text-align: center; font-size: 20px">Online performance of DSRL compared to state-of-the-art methods for RL with diffusion policies on Robomimic and OpenAI Gym benchmarks.</p>
+            </div>
+  
+            </div>
+
+            <h2 class="title is-4">Offline DSRL</h2>
+          <div class="columns is-multiline is-centered">
+            <div style="text-align: center;">
+              <img src="./static/im/offline_bar_graph.png" width="1000px"/>
+              <p style="text-align: center; font-size: 20px">Offline performance of DSRL compared to state-of-the-art methods for offline RL, aggregated across 10 tasks from OGBench benchmark.</p>
+            </div>
+          </div>            
+
+          <h2 class="title is-4">Offline-to-Online DSRL</h2>
+          <div class="columns is-multiline is-centered">
+            <div style="text-align: center;">
+              <img src="./static/im/sim_offline_to_online.png" width="700px"/>
+              <p style="text-align: center; font-size: 20px">Offline-to-online performance of DSRL compared to state-of-the-art offline-to-online RL methods on Robomimic benchmark.</p>
+            </div>
+  
+  
+            <h2 class="title is-4">Generalist Policy Adaptation via DSRL</h2>
+            <div class="columns is-multiline is-centered">
+            <div class="column is-3">
+            <video controls autoplay muted playsinline
+                src="./static/videos/pi0_aloha_base.mp4" poster="./resources/loading-icon.gif"></video>
+                <p style="text-align: center; font-size: 18px; font-weight: bold;">\(\pi_0\) zero-shot</p>
+            </div>
+            <div class="column is-3">
+              <video controls autoplay muted playsinline
+                src="./static/videos/pi0_aloha_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
+                <p style="text-align: center; font-size: 18px; font-weight: bold;">\(\pi_0\) after DSRL adaptation</p>            
+            </div>
+          </div>
+            <div style="text-align: center;">
+              <img src="./static/im/sim_pi0.png" width="650px" />
+              <p style="text-align: center; font-size: 20px">Online performance of DSRL steering \(\pi_0\) on the Libero benchmark and a simulated bimanual Aloha setup, compared to several existing approaches for online adaptation of generalist policies.</p>
+            </div>
+              </div>
+          </div>
+        </div>
+        </section>
+
           <!-- <div class="content has-text-justified has-text-centered"> -->
+
+<!-- <section class="section"> -->
+    <!-- <div class="container"> -->
+      <!-- <div class="columns is-centered"> -->
+        <!-- <div class="content has-text-centered">
+        <div style="width: 100%; padding: 0 20px;"> 
+          <h2 class="title is-3">Simulated Results</h2>
           <div class="content has-text-justified has-text-centered">
           <h2 class="title is-4">Online DSRL</h2>
 
           <div style="text-align: center;">
-              <img src="./static/im/sim_online1.pdf" width="1000px" />
-              <img src="./static/im/sim_online2.pdf" width="600px" />
+              <img src="./static/im/sim_online1.png" width="900px" />
+              <img src="./static/im/sim_online2.png" width="1500px" />
             <p style="text-align: center;">Online performance of DSRL compared to state-of-the-art methods for RL with diffusion policies on Robomimic and OpenAI Gym benchmarks.</p>
           </div>
 
-
           <h2 class="title is-4">Offline DSRL</h2>
           <div style="text-align: center;">
-            <img src="./static/im/sim_offline.pdf" width="1000px"/>
-            <p style="text-align: center;">Offline performance of DSRL compared to state-of-the-art methods for offline RL on OGBench benchmarks.</p>
+            <img src="./static/im/offline_bar_graph.pdf" width="1000px"/>
+            <p style="text-align: center;">Offline performance of DSRL compared to state-of-the-art methods for offline RL, aggregated across 10 tasks from OGBench benchmark.</p>
           </div>
           
 
@@ -497,16 +606,16 @@
 
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </div> -->
+    <!-- </div> -->
+  <!-- </section> -->
 
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{wagenmaker2025steering,
-  author    = {Wagenmaker, Andrew and ...},
+  author    = {Wagenmaker, Andrew and Nakamoto, Mitsuhiko and Zhang, Yunchu and Park, Seohong and Yagoub, Waleed and Nagabandi, Anusha and Gupta, Abhishek and Levine, Sergey},
   title     = {Steering Your Diffusion Policy with Latent Space Reinforcement Learning},
   journal   = {arXiv},
   year      = {2025},
