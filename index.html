@@ -131,7 +131,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
+                <a href="https://diffusion-steering.github.io"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -140,7 +140,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
+                <a href="https://diffusion-steering.github.io"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -160,7 +160,7 @@
               </span> -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies"
+                <a href="https://diffusion-steering.github.io"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -191,11 +191,11 @@
 
 <div class="content has-text-centered">
   <div class="container">
-    <h2 class="title is-3">Teaser video (placeholder)</h2>
+    <!-- <h2 class="title is-3">Teaser</h2> -->
       <div class="columns is-multiline is-centered">
-        <div class="column is-5">
+        <div class="column is-9">
           <video controls autoplay loop muted playsinline
-            src="./static/videos/exploration_dsrl_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
+            src="./static/videos/teaser_video.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
             <!-- <p style="font-size: 25px; font-weight: bold;">DSRL</p> -->
         </div>
@@ -258,16 +258,30 @@
                 <!-- chain-of-thought policy. Pink boxes represent embodied reasoning steps.</small></p> -->
 
             <p style="font-size: 20px">
-              Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(w \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(a\). We propose modifying the initial distribution of \(w\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\), that instead of choosing \(w \sim \mathcal{N}(0,I)\), chooses \(w\) to <i>steer</i> the distribution of actions produced by \(\pi_{\mathrm{dp}}\) in a desirable way, enabling highly sample efficient real-world adaptation of robot policies.
+              Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(w \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(a\). 
+              We propose modifying the initial distribution of \(w\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\) that, instead of choosing \(w \sim \mathcal{N}(0,I)\), chooses \(w\) to <i>steer</i> the distribution of 
+              actions produced by \(\pi_{\mathrm{dp}}\) in a desirable way:
             </p>
+
+            <div class="columns is-multiline is-centered">
+              <div class="column is-7">
+              <video controls autoplay loop muted playsinline
+                  src="./static/videos/dsrl_overview_video.mp4" poster="./resources/loading-icon.gif"></video>
+                  <!-- <h2 class="title is-4">pi0 base</h2> -->            
+                  <!-- <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise sampling</p> -->
+              </div>
+            </div>
 
             <p style="font-size: 20px">
               We refer to our approach as DSRL: Diffusion Steering via Reinforcement Learning. Notably, DSRL:
+            </p>
               <ul style="font-size: 20px">
                 <li>Completely avoids challenges typically associated with finetuning diffusion policies—such as back-propagation-through-time—by treating the noise as the action, and interpreting the base diffusion policy as part of the environment.</li>
                 <li>Only requires training a small MLP policy to select the noise, rather than finetuning the weights of a (potentially much larger) diffusion policy.</li>
                 <li>Does not require any access to the weights of the base diffusion policy, treating it completely as a black-box.</li>
               </ul>
+            <p style="font-size: 20px">
+              DSRL enables highly sample-efficient adaptation of real-world diffusion policies for robot control, and achieves state-of-the-art performance on simulated benchmarks.
             </p>
           </div>
         </div>
@@ -438,22 +452,23 @@
   <section class="section">
 <div class="content has-text-centered">
   <div class="container">
-    <h2 class="title is-3">Exploration</h2>
+    <h2 class="title is-3">Exploration Behavior</h2>
       <div class="columns is-multiline is-centered">
         <div class="column is-5">
-          <video controls autoplay muted playsinline
+          <video controls autoplay loop muted playsinline
             src="./static/videos/exploration_dsrl_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
             <!-- <h2 class="title is-4">pi0 base</h2> -->            
             <p style="font-size: 25px; font-weight: bold;">DSRL</p>
         </div>
         <div class="column is-5">
-          <video controls autoplay muted playsinline
+          <video controls autoplay loop muted playsinline
             src="./static/videos/exploration_rlpd_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
             <p style="font-size: 25px; font-weight: bold;">RLPD</p>            
         </div>
         <div class="content has-text-justified has-text-centered">
           <p style="font-size: 20px">
-            We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. Each clip shows the first 9 episodes of online RL for each approach. We see that the behaviors induced by RLPD are effectively random, and provide no meaningful learning signal. In contrast, DSRL from the start plays behaviors that are ''reasonable'', attempting to pick up the mushroom on nearly every episode, providing much more useful data from the start.
+            We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. Each clip shows the first 9 episodes of online RL for each approach. We see that the behaviors induced by RLPD are effectively random, 
+            and provide no meaningful learning signal. In contrast, DSRL behaviors that are ''reasonable'' from the start plays, attempting to pick up the mushroom on nearly every episode, providing much more useful data for learning.
           </p>
         </div>
       </div>
@@ -475,20 +490,22 @@
                 <!-- This introduces two inefficiences, however: -->
                 <br>
                 <br>
-                DSRL treats the noise \(w\) as an action, so that if we select noise \(w\), denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(a\), then instead of transition \((s, a, r, s')\), we train on the transition \((s, w, r, s')\). 
+                DSRL treats the noise \(w\) as an action, so that if we select noise \(w\) and denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(a\), then instead of transition \((s, a, r, s')\), we train on the transition \((s, w, r, s')\). 
                 There may, however, exist \(w'\neq w\) such that, when denoised, \(w'\) produces the same denoised action \(a\) as \(w\): 
                 <div class="column  has-text-centered">
-                  <img src="./static/videos/na_animation.gif" width="400px" />
+                  <img src="./static/videos/na_animation.gif" width="500px" />
                 </div>
-                <p style="font-size: 20px">Thus, in principle, we can infer that \(w'\) has the same behavior in our environment as \(w\) without actually playing it, yet naively applying an RL algorithm to \(w\) ignores this potential <i>aliasing</i> of noise actions.
-                Furthermore, in the typical offline learning setting, we are given a dataset of transitions of the form \((s, a, r, s')\), without the corresponding \(w\), so directly learning over the noise-space actions does not allow for incorporating offline data.
+                <p style="font-size: 20px">Thus, in principle, we can infer that \(w'\) has the same behavior in our environment as \(w\) without actually playing it. Naively applying an RL algorithm to transitions \((s, w, r, s')\) ignores this potential <i>aliasing</i> of noise actions, however.
+                Furthermore, it is unclear how to make use of offline data, where we have transitions \((s, a, r, s')\) of the form—since we do not know which \(w\) produced \(a\), we cannot directly use this data to learn a noise-space policy.                
                   <br>
                   <br>
-                To exploit the noise-aliasing nature of the diffusion policy and also make use of offline data, we instead propose the following algorithm:</p>
+                To exploit the noise-aliasing nature of the diffusion policy and enable the use of offline data, we propose the following algorithm:</p>
                 <div class="column  has-text-centered">
                   <img src="./static/im/dsrl_alg.png" width="900px" />
                 </div>
-                <p style="font-size: 20px">We train one \(Q\)-function on the original action space using only transitions of the form \((s, a, r, s')\), and then train a second \(Q\)-function on the noise space via distillation: using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((a,w)\) pairs, and training the noise space \(Q\)-function at \(w\) to match the value of the \(Q\)-function on the original action space at \(a\). This enables more sample-efficient, fully off-policy, learning, and naturally incorporates offline data.
+                <p style="font-size: 20px">
+                  Here we train one \(Q\)-function on the original action space using only transitions of the form \((s, a, r, s')\), and then train a second \(Q\)-function on the noise space via distillation: using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((a,w)\) pairs
+                   and training the noise space \(Q\)-function at \(w\) to match the value of the \(Q\)-function on the original action space at \(a\). This enables more sample-efficient, fully off-policy learning, and naturally incorporates offline data.
               </p>
               </div>
             </div>
@@ -510,7 +527,7 @@
                 <img src="./static/im/sim_online1.png" width="950px" />
                 <br>
                 <img src="./static/im/sim_online2.png" width="1100px" />
-              <p style="text-align: center; font-size: 20px">Online performance of DSRL compared to state-of-the-art methods for RL with diffusion policies on Robomimic and OpenAI Gym benchmarks.</p>
+              <p style="text-align: center; font-size: 20px">Online performance of DSRL compared to state-of-the-art methods for RL with diffusion policies on OpenAI Gym and Robomimic benchmarks.</p>
             </div>
   
             </div>
@@ -626,7 +643,7 @@
 
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
+    <!-- <div class="content has-text-centered">
       <a class="icon-link"
          href="./static/videos/nerfies_paper.pdf">
         <i class="fas fa-file-pdf"></i>
@@ -634,7 +651,7 @@
       <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
         <i class="fab fa-github"></i>
       </a>
-    </div>
+    </div> -->
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
