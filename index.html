@@ -202,7 +202,21 @@
       </div>
     </div>
   </div>
-<div style="height: 50px;"></div>
+<!-- <div style="height: 20px;"></div> -->
+
+<section class="section">
+  <div class="content has-text-centered">
+    <div class="container">
+        <div class="columns is-multiline is-centered">
+          <div class="content has-text-justified has-text-centered">
+            <p style="font-size: 22px">
+              <b>We propose DSRL: steering diffusion policies to desired behaviors by running reinforcement learning over their latent-noise space. DSRL is highly sample-efficient and enables real-world improvement of diffusion policies for robotic control, and state-of-the-art performance on simulated benchmarks.</b>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+      </section>
 
 
 <section class="section">
@@ -239,7 +253,8 @@
     <div class="container has-text-centered">
       <div class="columns is-centered">
         <div class="content has-text-centered">
-          <h2 class="title is-3">Approach</h2>
+          <h2 class="title is-3">Approach: Diffusion Steering via Reinforcement Learning</h2>
+          <!-- <h2 class="title is-3"><i>DSRL: Diffusion Steering via Reinforcement Learning</i></h2> -->
           <div class="content has-text-justified has-text-centered">
             <!--
             <div class="columns is-vcentered interpolation-panel">
@@ -258,8 +273,8 @@
                 <!-- chain-of-thought policy. Pink boxes represent embodied reasoning steps.</small></p> -->
 
             <p style="font-size: 20px">
-              Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(w \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(a\). 
-              We propose modifying the initial distribution of \(w\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\) that, instead of choosing \(w \sim \mathcal{N}(0,I)\), chooses \(w\) to <i>steer</i> the distribution of 
+              Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(\boldsymbol{w} \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(\boldsymbol{a}\). 
+              We propose modifying the initial distribution of \(\boldsymbol{w}\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\) that, instead of choosing \(\boldsymbol{w} \sim \mathcal{N}(0,I)\), chooses \(\boldsymbol{w}\) to <i>steer</i> the distribution of 
               actions produced by \(\pi_{\mathrm{dp}}\) in a desirable way:
             </p>
 
@@ -294,7 +309,9 @@
   <!-- <div class="container is-fluid"> -->
     <div style="width: 100%; padding: 0 20px;"> 
     <h2 class="title is-3">DSRL Enables Real-World Improvement of Single-Task Diffusion Policies</h2>
+    <div class="columns is-multiline is-centered">
     <p style="text-align: center; font-size: 20px;">Performance of single-task diffusion policy trained on 10 demonstrations before and after DSRL adaptation.</p>
+    </div>
     <div class="columns is-multiline is-centered">
         <div class="column is-3">
           <video controls autoplay muted playsinline
@@ -490,13 +507,15 @@
                 <!-- This introduces two inefficiences, however: -->
                 <br>
                 <br>
-                DSRL treats the noise \(w\) as an action, so that if we select noise \(w\) and denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(a\), then instead of transition \((s, a, r, s')\), we train on the transition \((s, w, r, s')\). 
-                There may, however, exist \(w'\neq w\) such that, when denoised, \(w'\) produces the same denoised action \(a\) as \(w\): 
+                DSRL treats the noise \(\boldsymbol{w}\) as an action, so that if we select noise \(\boldsymbol{w}\) and denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(\boldsymbol{a}\), then instead of transition 
+                \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\), we train on the transition \((\boldsymbol{s}, \boldsymbol{w}, \boldsymbol{r}, \boldsymbol{s}')\). 
+                There may, however, exist \(\boldsymbol{w}'\neq \boldsymbol{w}\) such that, when denoised, \(\boldsymbol{w}'\) produces the same denoised action \(\boldsymbol{a}\) as \(\boldsymbol{w}\): 
                 <div class="column  has-text-centered">
                   <img src="./static/videos/na_animation.gif" width="500px" />
                 </div>
-                <p style="font-size: 20px">Thus, in principle, we can infer that \(w'\) has the same behavior in our environment as \(w\) without actually playing it. Naively applying an RL algorithm to transitions \((s, w, r, s')\) ignores this potential <i>aliasing</i> of noise actions, however.
-                Furthermore, it is unclear how to make use of offline data, where we have transitions \((s, a, r, s')\) of the form—since we do not know which \(w\) produced \(a\), we cannot directly use this data to learn a noise-space policy.                
+                <p style="font-size: 20px">Thus, in principle, we can infer that \(\boldsymbol{w}'\) has the same behavior in our environment as \(\boldsymbol{w}\) without actually playing it. Naively applying an RL algorithm to transitions 
+                  \((\boldsymbol{s}, \boldsymbol{w}, \boldsymbol{r}, \boldsymbol{s}')\) ignores this potential <i>aliasing</i> of noise actions, however.
+                Furthermore, it is unclear how to make use of offline data, where we have transitions \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\) of the form—since we do not know which \(\boldsymbol{w}\) produced \(\boldsymbol{a}\), we cannot directly use this data to learn a noise-space policy.                
                   <br>
                   <br>
                 To exploit the noise-aliasing nature of the diffusion policy and enable the use of offline data, we propose the following algorithm:</p>
@@ -504,8 +523,9 @@
                   <img src="./static/im/dsrl_alg.png" width="900px" />
                 </div>
                 <p style="font-size: 20px">
-                  Here we train one \(Q\)-function on the original action space using only transitions of the form \((s, a, r, s')\), and then train a second \(Q\)-function on the noise space via distillation: using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((a,w)\) pairs
-                   and training the noise space \(Q\)-function at \(w\) to match the value of the \(Q\)-function on the original action space at \(a\). This enables more sample-efficient, fully off-policy learning, and naturally incorporates offline data.
+                  Here we train one \(Q\)-function on the original action space using only transitions of the form \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\), and then train a second \(Q\)-function on the noise space via distillation: 
+                  using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((\boldsymbol{a},\boldsymbol{w})\) pairs
+                   and training the noise space \(Q\)-function at \(\boldsymbol{w}\) to match the value of the \(Q\)-function on the original action space at \(\boldsymbol{a}\). This enables more sample-efficient, fully off-policy learning, and naturally incorporates offline data.
               </p>
               </div>
             </div>
