@@ -57,31 +57,6 @@
   </div>
   <div class="navbar-menu">
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-     <!--  <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a> -->
-
-   <!--    <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
-        </div>
-      </div> -->
     </div>
 
   </div>
@@ -131,7 +106,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://diffusion-steering.github.io"
+                <a href="https://arxiv.org/pdf/2506.15799"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -140,7 +115,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://diffusion-steering.github.io"
+                <a href="https://arxiv.org/abs/2506.15799"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -148,17 +123,6 @@
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-              <!-- <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span> -->
-              <!-- Code Link. -->
               <span class="link-block">
                 <a href="https://diffusion-steering.github.io"
                    class="external-link button is-normal is-rounded is-dark">
@@ -168,15 +132,6 @@
                   <span>Code</span>
                   </a>
               </span>
-              <!-- Dataset Link. -->
-             <!--  <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data</span>
-                  </a> -->
             </div>
 
           </div>
@@ -232,19 +187,6 @@
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <!-- div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div> -->
-    <!--/ Paper video. -->
   </div>
 </section>
 
@@ -256,24 +198,11 @@
           <h2 class="title is-3">Approach: Diffusion Steering via Reinforcement Learning</h2>
           <!-- <h2 class="title is-3"><i>DSRL: Diffusion Steering via Reinforcement Learning</i></h2> -->
           <div class="content has-text-justified has-text-centered">
-            <!--
-            <div class="columns is-vcentered interpolation-panel">
-              <div class="column  has-text-centered">
-                <video autoplay controls muted loop playsinline height="100%">
-                  <source src="static/videos/SummaryVid.mp4" type="video/mp4">
-                </video>
-              </div>
-            </div>
-            -->
-
             <div style="text-align: center;">
             <img src="./static/im/paper_figure_nofranka.png" width="700px"/>
             </div>
-            <!-- <p style="text-align: center;"><small>Schematic illustrating the reasoning steps produced by our embodied -->
-                <!-- chain-of-thought policy. Pink boxes represent embodied reasoning steps.</small></p> -->
-
             <p style="font-size: 20px">
-              Standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\) first samples noise \(\boldsymbol{w} \sim \mathcal{N}(0,I)\) that is then denoised through the reverse diffusion process to produce an action \(\boldsymbol{a}\). 
+              In standard deployment of a BC-trained diffusion policy \(\pi_{\mathrm{dp}}\), noise is sampled \(\boldsymbol{w} \sim \mathcal{N}(0,I)\) and then denoised through the reverse diffusion process to produce an action \(\boldsymbol{a}\). 
               We propose modifying the initial distribution of \(\boldsymbol{w}\) with an RL-trained latent-noise space policy \(\pi^{\mathcal{W}}\) that, instead of choosing \(\boldsymbol{w} \sim \mathcal{N}(0,I)\), chooses \(\boldsymbol{w}\) to <i>steer</i> the distribution of 
               actions produced by \(\pi_{\mathrm{dp}}\) in a desirable way:
             </p>
@@ -282,8 +211,6 @@
               <div class="column is-7">
               <video controls autoplay loop muted playsinline
                   src="./static/videos/dsrl_overview_video.mp4" poster="./resources/loading-icon.gif"></video>
-                  <!-- <h2 class="title is-4">pi0 base</h2> -->            
-                  <!-- <p style="font-size: 18px; font-weight: bold;">Diffusion policy with standard noise sampling</p> -->
               </div>
             </div>
 
@@ -291,12 +218,13 @@
               We refer to our approach as DSRL: Diffusion Steering via Reinforcement Learning. Notably, DSRL:
             </p>
               <ul style="font-size: 20px">
-                <li>Completely avoids challenges typically associated with finetuning diffusion policies—such as back-propagation-through-time—by treating the noise as the action, and interpreting the base diffusion policy as part of the environment.</li>
-                <li>Only requires training a small MLP policy to select the noise, rather than finetuning the weights of a (potentially much larger) diffusion policy.</li>
-                <li>Does not require any access to the weights of the base diffusion policy, treating it completely as a black-box.</li>
+                <li>Is highly sample efficient, enabling real-world improvement of diffusion and flow policies and achieving state-of-the-art performance on simulated benchmarks.</li>
+                <li>Applies both to single-task diffusion policies, as well as generalist diffusion and flow policies.</li>
+                <li>Completely avoids challenges typically associated with finetuning diffusion policies—such as back-propagation-through-time—by simply treating the noise as the action when applying RL to learn \(\pi^{\mathcal{W}}\).</li>
+                <li>Only requires training a small MLP policy to select the noise—rather than finetuning the weights of a (potentially much larger) diffusion policy—and, indeed, does not require direct access to the weights of the base diffusion policy at all.</li>
               </ul>
             <p style="font-size: 20px">
-              DSRL enables highly sample-efficient adaptation of real-world diffusion policies for robot control, and achieves state-of-the-art performance on simulated benchmarks.
+              In the following, we provide videos demonstrating DSRL's real-world performance, and a summary of our simulated results.
             </p>
           </div>
         </div>
@@ -437,55 +365,40 @@
         </div>
     </div>
   </div>
-<!-- <div style="height: 50px;"></div> -->
-
-
-<!-- <div class="content has-text-centered">
-    <div class="container">
-      <h2 class="title is-3">Uncut Training Timelapse</h2>
-      <div id="evaluation-carousel" class="carousel results-carousel">
-        <div class="item">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_franka.mp4" poster="./resources/loading-icon.gif"></video>
-        </div>
-        <div class="item">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_pi0_toaster.mp4" poster="./resources/loading-icon.gif"></video>
-        </div>
-        <div class="item">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
-        </div>
-        <div class="item">
-          <video controls autoplay loop muted playsinline
-            src="./static/videos/dsrl_training_pi0_spoon.mp4" poster="./resources/loading-icon.gif"></video>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="height: 30px;"></div> -->
 
 
   <section class="section">
 <div class="content has-text-centered">
   <div class="container">
-    <h2 class="title is-3">Exploration Behavior</h2>
+    <h2 class="title is-3">Exploration Behavior of DSRL</h2>
       <div class="columns is-multiline is-centered">
         <div class="column is-5">
           <video controls autoplay loop muted playsinline
             src="./static/videos/exploration_dsrl_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
-            <!-- <h2 class="title is-4">pi0 base</h2> -->            
-            <p style="font-size: 25px; font-weight: bold;">DSRL</p>
+        </div>
+        <div class="column is-5">
+            <img src="./static/videos/dsrl_exploration.gif" width="385px" />
+        </div>
+        <div class="column is-12">
+          <p style="font-size: 18px; font-weight: bold; margin-top: -20px;">DSRL exploration behavior in first 9 episodes of training</p>
         </div>
         <div class="column is-5">
           <video controls autoplay loop muted playsinline
             src="./static/videos/exploration_rlpd_mushroom.mp4" poster="./resources/loading-icon.gif"></video>
-            <p style="font-size: 25px; font-weight: bold;">RLPD</p>            
+        </div>
+        <div class="column is-5">
+            <img src="./static/videos/rlpd_exploration.gif" width="385px" />
+        </div>
+        <div class="column is-12">
+          <p style="font-size: 18px; font-weight: bold; margin-top: -20px;">RLPD exploration behavior in first 9 episodes of training</p>
         </div>
         <div class="content has-text-justified has-text-centered">
           <p style="font-size: 20px">
-            We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. Each clip shows the first 9 episodes of online RL for each approach. We see that the behaviors induced by RLPD are effectively random, 
-            and provide no meaningful learning signal. In contrast, DSRL behaviors that are ''reasonable'' from the start plays, attempting to pick up the mushroom on nearly every episode, providing much more useful data for learning.
+            We compare the exploration behavior of DSRL to that of a traditional RL algorithm, in this case RLPD. 
+            Each clip shows the first 9 episodes of online RL training for each approach, and corresponding end-effector positions. 
+            We see that the behaviors induced by RLPD are effectively random, 
+            and provide no meaningful learning signal. In contrast, DSRL behaviors are highly directed from the start of learning, 
+            attempting to pick up the mushroom on nearly every episode, providing much more useful data for learning.
           </p>
         </div>
       </div>
@@ -501,10 +414,8 @@
               <div class="content has-text-justified has-text-centered">
             
     
-                <!-- <h2 class="title is-4">Improving sample efficiency and incorporating offline data with noise aliasing</h2> -->
                 <p style="font-size: 20px">
                 While in principle DSRL can be instantiated with virtually any RL algorithm, we introduce an approach which makes particular use of the diffusion policy's structure to increase sample efficiency and incorporate offline data. 
-                <!-- This introduces two inefficiences, however: -->
                 <br>
                 <br>
                 DSRL treats the noise \(\boldsymbol{w}\) as an action, so that if we select noise \(\boldsymbol{w}\) and denoise it through the diffusion policy \(\pi_{\mathrm{dp}}\) to produce an action \(\boldsymbol{a}\), then instead of transition 
@@ -515,7 +426,7 @@
                 </div>
                 <p style="font-size: 20px">Thus, in principle, we can infer that \(\boldsymbol{w}'\) has the same behavior in our environment as \(\boldsymbol{w}\) without actually playing it. Naively applying an RL algorithm to transitions 
                   \((\boldsymbol{s}, \boldsymbol{w}, \boldsymbol{r}, \boldsymbol{s}')\) ignores this potential <i>aliasing</i> of noise actions, however.
-                Furthermore, it is unclear how to make use of offline data, where we have transitions \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\) of the form—since we do not know which \(\boldsymbol{w}\) produced \(\boldsymbol{a}\), we cannot directly use this data to learn a noise-space policy.                
+                Furthermore, it is unclear how to make use of offline data, where we have transitions of the form \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\)—since we do not know which \(\boldsymbol{w}\) produced \(\boldsymbol{a}\), we cannot directly use this data to learn a noise-space policy.                
                   <br>
                   <br>
                 To exploit the noise-aliasing nature of the diffusion policy and enable the use of offline data, we propose the following algorithm:</p>
@@ -523,9 +434,9 @@
                   <img src="./static/im/dsrl_alg.png" width="900px" />
                 </div>
                 <p style="font-size: 20px">
-                  Here we train one \(Q\)-function on the original action space using only transitions of the form \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\), and then train a second \(Q\)-function on the noise space via distillation: 
+                  Here we train one \(Q\)-function, \(Q^{\mathcal{A}}\), on the original action space using only transitions of the form \((\boldsymbol{s}, \boldsymbol{a}, \boldsymbol{r}, \boldsymbol{s}')\), and then train a second \(Q\)-function, \(Q^{\mathcal{W}}\), on the noise space via distillation: 
                   using the diffusion policy \(\pi_{\mathrm{dp}}\) to generate \((\boldsymbol{a},\boldsymbol{w})\) pairs
-                   and training the noise space \(Q\)-function at \(\boldsymbol{w}\) to match the value of the \(Q\)-function on the original action space at \(\boldsymbol{a}\). This enables more sample-efficient, fully off-policy learning, and naturally incorporates offline data.
+                   and training \(Q^{\mathcal{W}}\) at \(\boldsymbol{w}\) to match the value of \(Q^{\mathcal{A}}\) at \(\boldsymbol{a}\). This enables more sample-efficient, fully off-policy learning, and naturally incorporates offline data.
               </p>
               </div>
             </div>
@@ -590,62 +501,7 @@
         </div>
         </section>
 
-          <!-- <div class="content has-text-justified has-text-centered"> -->
 
-<!-- <section class="section"> -->
-    <!-- <div class="container"> -->
-      <!-- <div class="columns is-centered"> -->
-        <!-- <div class="content has-text-centered">
-        <div style="width: 100%; padding: 0 20px;"> 
-          <h2 class="title is-3">Simulated Results</h2>
-          <div class="content has-text-justified has-text-centered">
-          <h2 class="title is-4">Online DSRL</h2>
-
-          <div style="text-align: center;">
-              <img src="./static/im/sim_online1.png" width="900px" />
-              <img src="./static/im/sim_online2.png" width="1500px" />
-            <p style="text-align: center;">Online performance of DSRL compared to state-of-the-art methods for RL with diffusion policies on Robomimic and OpenAI Gym benchmarks.</p>
-          </div>
-
-          <h2 class="title is-4">Offline DSRL</h2>
-          <div style="text-align: center;">
-            <img src="./static/im/offline_bar_graph.pdf" width="1000px"/>
-            <p style="text-align: center;">Offline performance of DSRL compared to state-of-the-art methods for offline RL, aggregated across 10 tasks from OGBench benchmark.</p>
-          </div>
-          
-
-          <h2 class="title is-4">Offline-to-Online DSRL</h2>
-          <div style="text-align: center;">
-            <img src="./static/im/sim_offline_to_online.pdf" width="550px"/>
-            <p style="text-align: center;">Offline-to-online performance of DSRL compared to state-of-the-art offline-to-online RL methods on Robomimic benchmark.</p>
-          </div>
-
-
-          <h2 class="title is-4">Generalist Policy Adaptation via DSRL</h2>
-          <div class="columns is-multiline is-centered">
-          <div class="column is-5">
-          <video controls autoplay loop muted playsinline
-              src="./static/videos/pi0_aloha_base.mp4" poster="./resources/loading-icon.gif"></video>
-              <p style="text-align: center; font-size: 18px; font-weight: bold;">\(\pi_0\) zero-shot</p>
-          </div>
-          <div class="column is-5">
-            <video controls autoplay loop muted playsinline
-              src="./static/videos/pi0_aloha_dsrl.mp4" poster="./resources/loading-icon.gif"></video>
-              <p style="text-align: center; font-size: 18px; font-weight: bold;">\(\pi_0\) after DSRL adaptation</p>            
-          </div>
-        </div>
-          <div style="text-align: center;">
-            <img src="./static/im/sim_pi0.pdf" width="500px" />
-            <p style="text-align: center;">Online performance of DSRL steering \(\pi_0\) on the Libero benchmark and a simulated bimanual Aloha setup, compared to several existing approaches for online adaptation of generalist policies.</p>
-          </div>
-          
-
-
-          </div>
-        </div>
-      </div> -->
-    <!-- </div> -->
-  <!-- </section> -->
 
 
 <section class="section" id="BibTeX">
@@ -663,15 +519,6 @@
 
 <footer class="footer">
   <div class="container">
-    <!-- <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div> -->
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
